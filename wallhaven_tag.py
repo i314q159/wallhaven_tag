@@ -6,9 +6,7 @@ api_tag_info = "https://wallhaven.cc/api/v1/tag/"
 api_tag_page = f"https://wallhaven.cc/api/v1/search?apikey={api_key}&q=id:{tag_id}&page="
 img_paths = []
 
-tag_name = (
-    requests.get(f"{api_tag_info}{tag_id}").json().get("data", None).get("name", None)
-)
+tag_name = requests.get(f"{api_tag_info}{tag_id}").json().get("data", None).get("name", None)
 
 last_page = requests.get(f"{api_tag_page}1").json().get("meta", None).get("last_page", None)
 
