@@ -8,10 +8,12 @@ def wallhaven_json(wallhaven_api):
     return requests.get(wallhaven_api).json()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     img_paths = []
     tag_id = input("tag_id: ")
-    wallhaven_tag_page = f"https://wallhaven.cc/api/v1/search?apikey={wallhaven_key}&q=id:{tag_id}&page="
+    wallhaven_tag_page = (
+        f"https://wallhaven.cc/api/v1/search?apikey={wallhaven_key}&q=id:{tag_id}&page="
+    )
 
     tag_data = wallhaven_json(f"{wallhaven_tag_info}{tag_id}").get("data", None)
     match tag_data:
@@ -19,7 +21,9 @@ if __name__ == '__main__':
             print("tag id is wrong")
         case _:
             tag_name = tag_data.get("name")
-            last_page = wallhaven_json(f"{wallhaven_tag_page}1").get("meta").get("last_page")
+            last_page = (
+                wallhaven_json(f"{wallhaven_tag_page}1").get("meta").get("last_page")
+            )
 
             for page in range(1, last_page + 1):
                 img_dict = wallhaven_json(f"{wallhaven_tag_page}{page}").get("data")
@@ -28,6 +32,6 @@ if __name__ == '__main__':
                 print(f"page {page}")
 
             with open(f"./{tag_name} {tag_id}.txt", "w") as f:
-                f.writelines(img_path + '\n' for img_path in img_paths)
+                f.writelines(img_path + "\n" for img_path in img_paths)
 
             print(f"{tag_name} {tag_id}.txt, {len(img_paths)} line(s)")
