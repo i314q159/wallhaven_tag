@@ -34,7 +34,7 @@ if __name__ == "__main__":
                     img_paths.append(img.get("path", None))
                 print(f"page {page}")
 
-            with open(f"./{tag_name} {tag_id}.txt", "w") as f:
+            with open(f"./{tag_name}_{tag_id}.txt", "w") as f:
                 f.writelines(img_path + "\n" for img_path in img_paths)
 
-            print(f"{tag_name} {tag_id}.txt, {len(img_paths)} line(s)")
+            print(f"{tag_name}_{tag_id}.txt, {len(img_paths)} line(s)")
