@@ -1,27 +1,24 @@
-import json
-import random
-import time
-
 import requests
 
-wallhaven_key = "18nUEpLtkdrgmQpifc55Z1MAO8Cn7D44"
-wallhaven_tag = "https://wallhaven.cc/api/v1/tag/"
+WALLHAVEN_KEY = "18nUEpLtkdrgmQpifc55Z1MAO8Cn7D44"
+WALLHAVEN_TAG = "https://wallhaven.cc/api/v1/tag/"
+WALLHAVEN_SEARCH = "https://wallhaven.cc/api/v1/search"
 
 
 def wallhaven_json(wallhaven_api):
     return requests.get(wallhaven_api).json()
 
 
-def wallhaven_tag_page(wallhaven_key, tag_id):
-    return f"https://wallhaven.cc/api/v1/search?apikey={wallhaven_key}&q=id:{tag_id}&page="
+def wallhaven_tag_page(wallhaven_key, id):
+    return f"{WALLHAVEN_SEARCH}?apikey={wallhaven_key}&q=id:{id}&page="
 
 
 if __name__ == "__main__":
     img_paths = []
     tag_id = input("tag_id: ")
-    wallhaven_tag_page = wallhaven_tag_page(wallhaven_key, tag_id)
+    wallhaven_tag_page = wallhaven_tag_page(WALLHAVEN_KEY, tag_id)
 
-    tag_info = wallhaven_json(f"{wallhaven_tag}{tag_id}").get("data", None)
+    tag_info = wallhaven_json(f"{WALLHAVEN_TAG}{tag_id}").get("data", None)
     match tag_info:
         case None:
             print("tag id is wrong")
