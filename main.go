@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"encoding/json"
 	"io"
 	"net/http"
 )
@@ -32,13 +32,8 @@ func wallhaven_json(url string) []byte {
 		panic(err)
 	}
 	// TODO: return json
-	return body
+	return json.Unmarshal(body)
 }
 
 func main() {
-	id := "120"
-
-	fmt.Printf("%s\n", wallhaven_json(wallhaven_tag_info(id)))
-
-	fmt.Printf("%s\n", wallhaven_json(wallhaven_tag_page(id)+"1"))
 }
