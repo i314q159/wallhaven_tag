@@ -6,7 +6,9 @@ WALLHAVEN_SEARCH = "https://wallhaven.cc/api/v1/search"
 
 
 def wallhaven_json(wallhaven_api):
-    return requests.get(wallhaven_api).json()
+    r = requests.get(wallhaven_api)
+    if r.status_code == requests.codes.ok:
+        return r.json()
 
 
 def wallhaven_tag_page(wallhaven_key, id):
