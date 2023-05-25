@@ -1,6 +1,6 @@
 import requests
 
-WALLHAVEN_KEY = "18nUEpLtkdrgmQpifc55Z1MAO8Cn7D44"
+WALLHAVEN_KEY = "pRmbEacfPgeqeST5L2AH6qTEwxfN6SCO"
 WALLHAVEN_TAG = "https://wallhaven.cc/api/v1/tag/"
 WALLHAVEN_SEARCH = "https://wallhaven.cc/api/v1/search"
 
