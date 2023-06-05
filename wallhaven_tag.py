@@ -18,8 +18,9 @@ def wallhaven_tag_page(wallhaven_key, id):
 if __name__ == "__main__":
     img_paths = []
     tag_id = input("tag_id: ")
-    wallhaven_tag_page = wallhaven_tag_page(WALLHAVEN_KEY, tag_id)
+    wallhaven_tag_page = wallhaven_tag_page(WALLHAVEN_KEY, tag_id)  # type: ignore
 
+    # "get" is not a known member of "None"
     tag_info = wallhaven_json(f"{WALLHAVEN_TAG}{tag_id}").get("data", None)
     match tag_info:
         case None:
