@@ -46,5 +46,5 @@ if __name__ == "__main__":
         print(f"{tag_name}_{tag_id}.txt, {len(img_paths)} line(s)")
 
     except AttributeError:
-        print("tag_id is wrong")
+        print("There is something wrong.")
         sys.exit()
