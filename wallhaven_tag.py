@@ -4,6 +4,7 @@ import os
 import sys
 
 import requests
+import concurrent.futures
 
 wallhaven_key = "pRmbEacfPgeqeST5L2AH6qTEwxfN6SCO"
 wallhaven_tag = "https://wallhaven.cc/api/v1/tag/"
@@ -31,12 +32,20 @@ if __name__ == "__main__":
         tag_name = tag_info.get("name")
         last_page = wallhaven_json(f"{wallhaven_tag_page}1").get("meta").get("last_page")  # type: ignore
 
-        # TODO: async
-        for page in range(1, last_page + 1):
+        pages = int_array = [i for i in range(1, last_page + 1)]
+
+
+        def run_cmd(page):
             img_dict = wallhaven_json(f"{wallhaven_tag_page}{page}").get("data")  # type: ignore
             page_img_paths = [img.get("path", None) for img in img_dict]
             img_paths.extend(page_img_paths)
             print(f"page {page}")
+
+
+        cpu_count = os.cpu_count() or 8
+        max_workers = cpu_count * 3
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+            executor.map(run_cmd, pages)
 
         file_path = os.path.join(".", f"{tag_name}_{tag_id}.txt")
 
