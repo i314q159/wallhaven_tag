@@ -21,6 +21,13 @@ def wallhaven_tag_page(wallhaven_key, id):
     return f"{wallhaven_search}?apikey={wallhaven_key}&q=id:{id}&page="
 
 
+def run_cmd(page):
+    img_dict = wallhaven_json(f"{wallhaven_tag_page}{page}").get("data")  # type: ignore
+    page_img_paths = [img.get("path", None) for img in img_dict]
+    img_paths.extend(page_img_paths)
+    print(f"page {page}")
+
+
 if __name__ == "__main__":
     img_paths = []
 
@@ -33,14 +40,6 @@ if __name__ == "__main__":
         last_page = wallhaven_json(f"{wallhaven_tag_page}1").get("meta").get("last_page")  # type: ignore
 
         pages = int_array = [i for i in range(1, last_page + 1)]
-
-
-        def run_cmd(page):
-            img_dict = wallhaven_json(f"{wallhaven_tag_page}{page}").get("data")  # type: ignore
-            page_img_paths = [img.get("path", None) for img in img_dict]
-            img_paths.extend(page_img_paths)
-            print(f"page {page}")
-
 
         cpu_count = os.cpu_count() or 8
         max_workers = cpu_count * 3
