@@ -17,8 +17,8 @@ def wallhaven_json(wallhaven_api, default=None):
         return r.json() or default
 
 
-def wallhaven_tag_page(wallhaven_key, id):
-    return f"{wallhaven_search}?apikey={wallhaven_key}&q=id:{id}&page="
+def wallhaven_tag_page(key, num):
+    return f"{wallhaven_search}?apikey={key}&q=id:{num}&page="
 
 
 def run_cmd(page):
