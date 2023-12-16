@@ -1,58 +1,65 @@
-#!/usr/bin/env python3
-
 import os
-import sys
 
-import requests
-import concurrent.futures
+from wallhaven.api import Wallhaven
 
-wallhaven_key = "pRmbEacfPgeqeST5L2AH6qTEwxfN6SCO"
-wallhaven_tag = "https://wallhaven.cc/api/v1/tag/"
-wallhaven_search = "https://wallhaven.cc/api/v1/search"
+key = f"pRmbEacfPgeqeST5L2AH6qTEwxfN6SCO"
 
 
-def wallhaven_json(wallhaven_api, default=None):
-    r = requests.get(wallhaven_api)
-    if r.status_code == requests.codes.ok:
-        return r.json() or default
+def init(api_key):
+    wallhaven_obj = Wallhaven(api_key)
+    return wallhaven_obj
 
 
-def wallhaven_tag_page(key, num):
-    return f"{wallhaven_search}?apikey={key}&q=id:{num}&page="
+def get_current_page(t_id, page):
+    wallhaven.params["q"] = f"id:{t_id}"
+    wallhaven.params["page"] = f"{page}"
+    tag_info = wallhaven.search()
+
+    current_page_data = tag_info.data
+    meta = tag_info.meta
+    print(f"current page: {meta.current_page}")
+
+    if page == 1:
+        last_page = meta.last_page
+        name = meta.query.get("tag")
+
+        return name, last_page, current_page_data
+    else:
+        return current_page_data
 
 
-def run_cmd(page):
-    img_dict = wallhaven_json(f"{wallhaven_tag_page}{page}").get("data")  # type: ignore
-    page_img_paths = [img.get("path", None) for img in img_dict]
-    img_paths.extend(page_img_paths)
-    print(f"page {page}")
+def get_full_url(wallpaper):
+    wallpaper_id = wallpaper.id
+
+    file_type = wallpaper.file_type.split("/")[1]
+    wallpaper_file_type = f"jpg" if file_type == "jpeg" else file_type
+
+    full_url = f"https://w.wallhaven.cc/full/{wallpaper_id[:2]}/wallhaven-{wallpaper_id}.{wallpaper_file_type}"
+    return full_url
+
+
+def get_urls(current_page_data, urls):
+    for wallpaper in current_page_data:
+        full_url = get_full_url(wallpaper=wallpaper)
+        urls.append(full_url)
 
 
 if __name__ == "__main__":
-    img_paths = []
+    tag_id = input("tag id: ")
+    tag_urls = []
 
-    tag_id = sys.argv[1]
-    wallhaven_tag_page = wallhaven_tag_page(wallhaven_key, tag_id)  # type: ignore
+    wallhaven = init(api_key=key)
 
-    try:
-        tag_info = wallhaven_json(f"{wallhaven_tag}{tag_id}").get("data")  # type: ignore
-        tag_name = tag_info.get("name")
-        last_page = wallhaven_json(f"{wallhaven_tag_page}1").get("meta").get("last_page")  # type: ignore
+    tag_name, tag_last_page, first_page_data = get_current_page(t_id=tag_id, page=1)
+    get_urls(current_page_data=first_page_data, urls=tag_urls)
 
-        pages = int_array = [i for i in range(1, last_page + 1)]
+    if tag_last_page != 1:
+        for current_page in range(2, tag_last_page + 1):
+            other_page_data = get_current_page(t_id=tag_id, page=current_page)
+            get_urls(current_page_data=other_page_data, urls=tag_urls)
 
-        cpu_count = os.cpu_count() or 8
-        max_workers = cpu_count * 3
-        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-            executor.map(run_cmd, pages)
+    file_path = os.path.join(".", f"{tag_name}_{tag_id}.txt")
+    with open(file_path, "w") as f:
+        f.writelines(f"{tag_url}\n" for tag_url in tag_urls)
 
-        file_path = os.path.join(".", f"{tag_name}_{tag_id}.txt")
-
-        with open(file_path, "w") as f:
-            f.writelines(f"{img_path}\n" for img_path in img_paths)
-
-        print(f"{tag_name}_{tag_id}.txt, {len(img_paths)} line(s)")
-
-    except AttributeError:
-        print("There is something wrong.")
-        sys.exit()
+    print(f"{tag_name}_{tag_id}.txt, {len(tag_urls)} line(s)")
