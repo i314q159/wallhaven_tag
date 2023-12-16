@@ -10,10 +10,10 @@ def init(api_key):
     return wallhaven_obj
 
 
-def get_current_page(t_id, page):
-    wallhaven.params["q"] = f"id:{t_id}"
-    wallhaven.params["page"] = f"{page}"
-    tag_info = wallhaven.search()
+def get_current_page(wh, t_id, page):
+    wh.params["q"] = f"id:{t_id}"
+    wh.params["page"] = f"{page}"
+    tag_info = wh.search()
 
     current_page_data = tag_info.data
     meta = tag_info.meta
@@ -50,12 +50,16 @@ if __name__ == "__main__":
 
     wallhaven = init(api_key=key)
 
-    tag_name, tag_last_page, first_page_data = get_current_page(t_id=tag_id, page=1)
+    tag_name, tag_last_page, first_page_data = get_current_page(
+        wh=wallhaven, t_id=tag_id, page=1
+    )
     get_urls(current_page_data=first_page_data, urls=tag_urls)
 
     if tag_last_page != 1:
         for current_page in range(2, tag_last_page + 1):
-            other_page_data = get_current_page(t_id=tag_id, page=current_page)
+            other_page_data = get_current_page(
+                wh=wallhaven, t_id=tag_id, page=current_page
+            )
             get_urls(current_page_data=other_page_data, urls=tag_urls)
 
     file_path = os.path.join(".", f"{tag_name}_{tag_id}.txt")
