@@ -56,7 +56,7 @@ if __name__ == "__main__":
     get_urls(current_page_data=first_page_data, urls=tag_urls)
 
     if tag_last_page != 1:
-        for current_page in range(2, tag_last_page + 1):  # type: ignore
+        for current_page in range(2, tag_last_page + 1): # type: ignore
             other_page_data = get_current_page(
                 wh=wallhaven, t_id=tag_id, page=current_page)
             get_urls(current_page_data=other_page_data, urls=tag_urls)
