@@ -34,8 +34,7 @@ def get_full_url(wallpaper):
     file_type = wallpaper.file_type.split("/")[1]
     wallpaper_file_type = "jpg" if file_type == "jpeg" else file_type
 
-    full_url = f"https://w.wallhaven.cc/full/{
-        wallpaper_id[:2]}/wallhaven-{wallpaper_id}.{wallpaper_file_type}"
+    full_url = f"https://w.wallhaven.cc/full/{wallpaper_id[:2]}/wallhaven-{wallpaper_id}.{wallpaper_file_type}"
     return full_url
 
 
@@ -52,17 +51,20 @@ if __name__ == "__main__":
     wallhaven = init(api_key=key)
 
     tag_name, tag_last_page, first_page_data = get_current_page(
-        wh=wallhaven, t_id=tag_id, page=1)
+        wh=wallhaven, t_id=tag_id, page=1
+    )
     get_urls(current_page_data=first_page_data, urls=tag_urls)
 
     if tag_last_page != 1:
         for current_page in range(2, tag_last_page + 1):  # type: ignore
             other_page_data = get_current_page(
-                wh=wallhaven, t_id=tag_id, page=current_page)
+                wh=wallhaven, t_id=tag_id, page=current_page
+            )
             get_urls(current_page_data=other_page_data, urls=tag_urls)
 
-    file_path = os.path.join(".", f"{tag_name}_{tag_id}.txt")
+    file_name = f"{tag_name}_{tag_id}.txt"
+    file_path = os.path.join(".", file_name)
     with open(file_path, "w") as f:
         f.writelines(f"{tag_url}\n" for tag_url in tag_urls)
 
-    print(f"{tag_name}_{tag_id}.txt, {len(tag_urls)} line(s)")
+    print(file_name)
