@@ -2,8 +2,7 @@ import os
 
 from wallhaven.api import Wallhaven
 
-key = "pRmbEacfPgeqeST5L2AH6qTEwxfN6SCO"
-
+KEY = "pRmbEacfPgeqeST5L2AH6qTEwxfN6SCO"
 
 def init(api_key):
     wallhaven_obj = Wallhaven(api_key)
@@ -48,7 +47,7 @@ if __name__ == "__main__":
     tag_id = input("tag id: ")
     tag_urls = []
 
-    wallhaven = init(api_key=key)
+    wallhaven = init(api_key=KEY)
 
     tag_name, tag_last_page, first_page_data = get_current_page(
         wh=wallhaven, t_id=tag_id, page=1
