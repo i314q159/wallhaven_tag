@@ -1,4 +1,5 @@
 import os
+import sys
 
 from wallhaven.api import Wallhaven
 
@@ -44,7 +45,8 @@ def get_urls(current_page_data, urls):
 
 
 if __name__ == "__main__":
-    tag_id = input("tag id: ")
+    args = sys.argv
+    tag_id = args[1]
     tag_urls = []
 
     wallhaven = init(api_key=KEY)
