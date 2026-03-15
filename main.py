@@ -5,6 +5,7 @@ from wallhaven.api import Wallhaven
 
 KEY = "pRmbEacfPgeqeST5L2AH6qTEwxfN6SCO"
 
+
 def init(api_key):
     wallhaven_obj = Wallhaven(api_key)
     return wallhaven_obj
