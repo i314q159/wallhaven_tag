@@ -1,9 +1,8 @@
 import os
 import sys
+import configparser
 
 from wallhaven.api import Wallhaven
-
-KEY = "pRmbEacfPgeqeST5L2AH6qTEwxfN6SCO"
 
 
 def init(api_key):
@@ -18,7 +17,7 @@ def get_current_page(wh, t_id, page):
 
     current_page_data = tag_info.data
     meta = tag_info.meta
-    print(f"current page: {meta.current_page}")
+    print(f"page: {meta.current_page}")
 
     if page == 1:
         last_page = meta.last_page
@@ -49,6 +48,11 @@ if __name__ == "__main__":
     args = sys.argv
     tag_id = args[1]
     tag_urls = []
+
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+
+    KEY = config['default']['KEY']
 
     wallhaven = init(api_key=KEY)
 
