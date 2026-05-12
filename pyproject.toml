@@ -1,0 +1,14 @@
+[project]
+name = "wallhaven-tag"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "typing-extensions>=4.15.0",
+    "wallhaven>=0.1.0",
+]
+
+[[tool.uv.index]]
+url = "https://mirrors.cernet.edu.cn/pypi/web/simple"
+default = true
