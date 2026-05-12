@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
     file_name = f"{tag_name}_{tag_id}.txt"
     file_path = os.path.join(".", file_name)
-    with open(file_path, "w") as f:
+    with open(file_path, "w", encoding="utf-8") as f:
         f.writelines(f"{tag_url}\n" for tag_url in tag_urls)
 
     print(file_name)
