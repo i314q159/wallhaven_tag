@@ -19,13 +19,21 @@ def get_current_page(wh, t_id, page):
     meta = tag_info.meta
     print(f"page: {meta.current_page}")
 
-    if page == 1:
-        last_page = meta.last_page
-        name = meta.query.get("tag")
+    # if page == 1:
+    #     last_page = meta.last_page
+    #     name = meta.query.get("tag")
 
-        return name, last_page, current_page_data
-    else:
-        return current_page_data
+    #     return name, last_page, current_page_data
+    # else:
+    #     return current_page_data
+
+    match page:
+        case 1:
+            last_page = meta.last_page
+            name = meta.query.get("tag")
+            return name, last_page, current_page_data
+        case _:
+            return current_page_data
 
 
 def get_full_url(wallpaper):
@@ -50,9 +58,9 @@ if __name__ == "__main__":
     tag_urls = []
 
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config.read("config.ini")
 
-    KEY = config['default']['KEY']
+    KEY = config["default"]["KEY"]
 
     wallhaven = init(api_key=KEY)
 
