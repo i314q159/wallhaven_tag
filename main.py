@@ -1,11 +1,23 @@
 import os
 import sys
-import configparser
+import tomllib
 
 from wallhaven.api import Wallhaven
+from wallhaven.session import handler
 
 
-def init(api_key):
+def load_config():
+    with open("config.toml", "rb") as f:
+        return tomllib.load(f)
+
+
+def get_proxy(config):
+    proxy = config["proxy"]
+    return f"http://{proxy['ip']}:{proxy['port']}"
+
+
+def init(api_key, proxy):
+    handler.session.proxies.update({"http": proxy, "https": proxy})
     wallhaven_obj = Wallhaven(api_key)
     return wallhaven_obj
 
@@ -57,12 +69,12 @@ if __name__ == "__main__":
     tag_id = args[1]
     tag_urls = []
 
-    config = configparser.ConfigParser()
-    config.read("config.ini")
+    config = load_config()
 
-    KEY = config["default"]["KEY"]
+    KEY = config["wallhaven"]["key"]
 
-    wallhaven = init(api_key=KEY)
+    proxy = get_proxy(config)
+    wallhaven = init(api_key=KEY, proxy=proxy)
 
     tag_name, tag_last_page, first_page_data = get_current_page(
         wh=wallhaven, t_id=tag_id, page=1
@@ -77,7 +89,9 @@ if __name__ == "__main__":
             get_urls(current_page_data=other_page_data, urls=tag_urls)
 
     file_name = f"{tag_name}_{tag_id}.txt"
-    file_path = os.path.join(".", file_name)
+    output_dir = "output"
+    os.makedirs(output_dir, exist_ok=True)
+    file_path = os.path.join(output_dir, file_name)
     with open(file_path, "w", encoding="utf-8") as f:
         f.writelines(f"{tag_url}\n" for tag_url in tag_urls)
 

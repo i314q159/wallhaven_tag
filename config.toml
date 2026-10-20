@@ -1,0 +1,6 @@
+[proxy]
+ip = "127.0.0.1"
+port = 12334
+
+[wallhaven]
+key = "pRmbEacfPgeqeST5L2AH6qTEwxfN6SCO"
