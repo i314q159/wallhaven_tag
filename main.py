@@ -95,4 +95,4 @@ if __name__ == "__main__":
     with open(file_path, "w", encoding="utf-8") as f:
         f.writelines(f"{tag_url}\n" for tag_url in tag_urls)
 
-    print(file_name)
+    print(f"./output/{file_name}")
