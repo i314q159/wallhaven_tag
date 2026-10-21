@@ -2,24 +2,10 @@ import os
 import sys
 import tomllib
 
+import utils
+
 from wallhaven.api import Wallhaven
 from wallhaven.session import handler
-
-
-def load_config():
-    with open("config.toml", "rb") as f:
-        return tomllib.load(f)
-
-
-def get_proxy(config):
-    proxy = config["proxy"]
-    return f"http://{proxy['ip']}:{proxy['port']}"
-
-
-def init(api_key, proxy):
-    handler.session.proxies.update({"http": proxy, "https": proxy})
-    wallhaven_obj = Wallhaven(api_key)
-    return wallhaven_obj
 
 
 def get_current_page(wh, t_id, page):
@@ -69,12 +55,11 @@ if __name__ == "__main__":
     tag_id = args[1]
     tag_urls = []
 
-    config = load_config()
-
+    config = utils.load_config()
     KEY = config["wallhaven"]["key"]
 
-    proxy = get_proxy(config)
-    wallhaven = init(api_key=KEY, proxy=proxy)
+    proxy = utils.get_proxy(config)
+    wallhaven = utils.init(api_key=KEY, proxy=proxy)
 
     tag_name, tag_last_page, first_page_data = get_current_page(
         wh=wallhaven, t_id=tag_id, page=1
