@@ -1,11 +1,7 @@
 import os
 import sys
-import tomllib
 
 import utils
-
-from wallhaven.api import Wallhaven
-from wallhaven.session import handler
 
 
 def get_current_page(wh, t_id, page):

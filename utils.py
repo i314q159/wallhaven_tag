@@ -1,5 +1,6 @@
 import tomllib
 
+# https://github.com/lucasshiva/wallhaven
 from wallhaven.api import Wallhaven
 from wallhaven.session import handler
 

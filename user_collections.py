@@ -21,5 +21,3 @@ listing = wallhaven.get_private_collection_listing(
 for wallpaper in listing.data:
     print(wallpaper)
     wallpaper.save("./output/")
-
-# TODO - 自己实现突破官方合集 24 张的限制
